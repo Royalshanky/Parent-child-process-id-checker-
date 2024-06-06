@@ -1,0 +1,41 @@
+// Online C++ compiler to run C++ program online
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+	int main(void)
+	{
+	
+		pid_t pid;
+		int wait_time;
+		switch(pid = fork()) 
+		{
+			case -1:
+			perror("fork"); //it is used when there is a problem in creating the child process
+			exit(1); 
+			case 0:
+			printf(" It is the child process\n");
+			//we will print the child process id 
+			printf(" Child Process ID is %d\n", getpid());
+			//we will get the parent process id
+			printf(" Parent PID is %d\n", getppid());	
+			printf(" enter  exit for child : ");
+			scanf(" %d", &wait_time);
+			printf(" Child process get terminated \n");
+			exit(wait_time);
+			default:
+			printf("It is the parent process\n");
+			printf("Parent Process ID is %d\n", getpid());
+			printf("Child Process ID is %d\n", pid);
+			printf("Waiting for child to complete the process \n");
+			//parent is waiting for child to complete it execution
+			wait(&wait_time);
+			printf("child exit status is: %d\n", WEXITSTATUS(wait_time));
+			printf("Parent process is terminated \n");
+		}
+		// It is a "ps command" that we use to display the current status of the processes
+		int process_info = system("ps -e -f");
+		return 0;
+	}
